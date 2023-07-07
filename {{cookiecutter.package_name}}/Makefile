@@ -1,8 +1,17 @@
 GLOBAL_PYTHON := $(shell command -v python 2> /dev/null)
 GLOBAL_POETRY := $(shell command -v poetry 2> /dev/null)
 
-VIRTUAL_ENV = .venv
+CURRENT_ENV := 
+
+DEFAULT_ENV := .venv
 HOOKS = .git/hooks
+
+ifdef $(shell command -v poetry env info --path 2> /dev/null)
+	VIRTUAL_ENV = poetry env info --path
+else
+	VIRTUAL_VENV = DEFAULT_ENV
+endif
+
 ifeq (${OS}, Windows_NT)
 	BIN = ${VIRTUAL_ENV}/Scripts/
 else
@@ -19,6 +28,7 @@ clean:
 
 check-poetry:
 	@if [ -z ${GLOBAL_POETRY} ]; then echo "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
+	${GLOBAL_POETRY} lock --no-update
 
 install-poetry:
 	curl -sSL https://install.python-poetry.org | ${GLOBAL_PYTHON} -
