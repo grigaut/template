@@ -15,7 +15,7 @@ theme:
     - content.code.annotate         # Admonitions
     - content.code.copy             # copy code block
     - watch:
-        - "src/{{cookiecutter.package_name|lower|replace('-', '_')}}"
+        - "src/{{cookiecutter.module_name}}"
 
 nav:
   - Code Reference: reference/

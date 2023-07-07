@@ -7,9 +7,7 @@ authors = ["{{ cookiecutter.author }} <{{ cookiecutter.email }}>"]
 license = "{{ cookiecutter.license }}"
 readme = "README.md"
 
-packages = [
-    { include = "{{cookiecutter.package_name|lower|replace('-', '_')}}", from = "src" },
-]
+packages = [{ include = "{{cookiecutter.module_name}}", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "{{cookiecutter.compatible_python_versions}}"
@@ -106,14 +104,11 @@ addopts = ["--import-mode=importlib", "--cov"]
 testpaths = ["tests"]
 
 [tool.coverage.paths]
-source = [
-    "{{cookiecutter.package_name|lower|replace('-', '_')}}",
-    "*/site-packages",
-]
+source = ["{{cookiecutter.module_name}}", "*/site-packages"]
 
 [tool.coverage.run]
 branch = true
-source = ["{{cookiecutter.package_name|lower|replace('-', '_')}}"]
+source = ["{{cookiecutter.module_name}}"]
 
 [tool.coverage.report]
 show_missing = true
