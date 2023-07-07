@@ -7,10 +7,10 @@ DEFAULT_ENV := .venv
 HOOKS = .git/hooks
 
 
-CURRENT_ENV := $(shell command -v poetry env info --path 2> /dev/null)
+CURRENT_ENV := $(shell command -v ${GLOBAL_POETRY} env info --path 2> /dev/null)
 
 ifdef CURRENT_ENV
-	VIRTUAL_ENV = ${GLOBAL_POETRY} env info --path
+	VIRTUAL_ENV = $(shell ${GLOBAL_POETRY} env info --path)
 else
 	VIRTUAL_VENV = DEFAULT_ENV
 endif
