@@ -1,8 +1,6 @@
 GLOBAL_PYTHON := $(shell command -v python 2> /dev/null)
 GLOBAL_POETRY := $(shell command -v poetry 2> /dev/null)
 
-CURRENT_ENV := 
-
 DEFAULT_ENV := .venv
 HOOKS = .git/hooks
 
@@ -40,7 +38,7 @@ ${VIRTUAL_ENV}:
 	${PYTHON} -m venv ${VIRTUAL_ENV}
 
 .PHONY: poetry-install
-poetry-install: 
+poetry-install:
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --only main --ansi
 
@@ -52,7 +50,7 @@ install:
 # Development Rules
 
 .PHONY: poetry-install-dev
-poetry-install-dev: 
+poetry-install-dev:
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --ansi
 
@@ -74,7 +72,7 @@ tests:
 # Documentation Rules
 
 .PHONY: poetry-install-docs
-poetry-install-docs: 
+poetry-install-docs:
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --only docs --ansi
 

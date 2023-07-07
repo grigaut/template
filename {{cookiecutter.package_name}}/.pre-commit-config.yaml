@@ -7,51 +7,45 @@ repos:
         language: system
         types: [text]
         stages: [commit, push, manual]
-      
+
       - id: no-commit-to-branch
         name: "don't commit to branch"
         entry: no-commit-to-branch
         language: python
         pass_filenames: false
         always_run: true
-      
+
       - id: check-added-large-files
         name: Check for added large files
         entry: check-added-large-files
         language: system
-      
-      - id: check-docstring-first
-        name: check docstring is first
-        description: checks a common error of defining a docstring after code.
-        entry: check-docstring-first
-        language: python
-      
+
       - id: check-toml
         name: Check Toml
         entry: check-toml
         language: system
         types: [toml]
-      
+
       - id: check-yaml
         name: Check Yaml
         entry: check-yaml
         language: system
         types: [yaml]
-      
+
       - id: detect-private-key
         name: detect private key
         description: detects the presence of private keys.
         entry: detect-private-key
         language: python
         types: [text]
-      
+
       - id: black
         name: black
         entry: black
         language: system
         types: [python]
         require_serial: true
-      
+
       - id: ruff
         name: ruff
         description: "Run 'ruff' for extremely fast Python linting"
@@ -62,7 +56,7 @@ repos:
         require_serial: true
         additional_dependencies: []
         minimum_pre_commit_version: '2.9.2'
-      
+
       - id: poetry-check
         name: poetry-check
         description: run poetry check to validate config
