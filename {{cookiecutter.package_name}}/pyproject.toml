@@ -18,8 +18,10 @@ black = "*"
 pre-commit = "*"
 pre-commit-hooks = "*"
 ruff = "*"
-pydocstyle = "*"
-interrogate = "*"
+pytest = "*"
+coverage = { extras = ["toml"], version = "*" }
+pytest-cov = "*"
+pytest-mock = "*"
 
 
 [tool.poetry.group.docs.dependencies]
@@ -76,28 +78,6 @@ unfixable = [
     # found comented-out code
     "ERA001",
 ]
-
-[tool.ruff.pydocstyle]
-convention = 'numpy'
-
-[tool.interrogate]
-ignore-init-method = true
-ignore-init-module = true
-ignore-magic = true
-ignore-semiprivate = false
-ignore-private = false
-ignore-property-decorators = false
-ignore-module = true
-ignore-nested-functions = true
-ignore-nested-classes = true
-ignore-setters = false
-fail-under = 100
-exclude = ["setup.py", "docs", "build"]
-verbose = 1
-quiet = false
-whitelist-regex = []
-color = true
-omit-covered-files = false
 
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib", "--cov"]
