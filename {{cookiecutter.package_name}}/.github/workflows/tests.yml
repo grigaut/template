@@ -45,6 +45,3 @@ jobs:
       - name: Run pytest
         run: |
           python -m poetry run python -m pytest
-        env:
-          CDSAPI_URL: https://cds.climate.copernicus.eu/api/v2
-          CDSAPI_KEY: '{uid}:{api-key}'
