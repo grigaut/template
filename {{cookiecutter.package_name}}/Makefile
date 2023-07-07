@@ -6,8 +6,11 @@ CURRENT_ENV :=
 DEFAULT_ENV := .venv
 HOOKS = .git/hooks
 
-ifdef $(shell command -v poetry env info --path 2> /dev/null)
-	VIRTUAL_ENV = poetry env info --path
+
+CURRENT_ENV := $(shell command -v poetry env info --path 2> /dev/null)
+
+ifdef CURRENT_ENV
+	VIRTUAL_ENV = ${GLOBAL_POETRY} env info --path
 else
 	VIRTUAL_VENV = DEFAULT_ENV
 endif
@@ -26,7 +29,7 @@ clean:
 
 # Poetry Tatgets
 
-check-poetry:
+check-poetry: pyproject.toml
 	@if [ -z ${GLOBAL_POETRY} ]; then echo "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
 	${GLOBAL_POETRY} lock --no-update
 
@@ -37,7 +40,7 @@ ${VIRTUAL_ENV}:
 	${PYTHON} -m venv ${VIRTUAL_ENV}
 
 .PHONY: poetry-install
-poetry-install: pyproject.toml
+poetry-install: 
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --only main --ansi
 
@@ -49,7 +52,7 @@ install:
 # Development Rules
 
 .PHONY: poetry-install-dev
-poetry-install-dev: pyproject.toml poetry.lock
+poetry-install-dev: 
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --ansi
 
@@ -71,7 +74,7 @@ tests:
 # Documentation Rules
 
 .PHONY: poetry-install-docs
-poetry-install-docs: poetry.lock
+poetry-install-docs: 
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --only docs --ansi
 
