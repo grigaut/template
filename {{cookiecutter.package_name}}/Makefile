@@ -37,7 +37,7 @@ ${VIRTUAL_ENV}:
 	${PYTHON} -m venv ${VIRTUAL_ENV}
 
 .PHONY: poetry-install
-poetry-install: pyproject.toml poetry.lock
+poetry-install: pyproject.toml
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --only main --ansi
 
