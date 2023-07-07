@@ -31,9 +31,9 @@ jobs:
           python -m poetry install --with dev
       - name: Install pre-commit
         run: |
-          python -m pre-commit install
+          pre-commit install
       - name: Run pre-commit
-        run: python -m SKIP=no-commit-to-branch pre-commit run --all-files
+        run: SKIP=no-commit-to-branch pre-commit run --all-files
   Pytest:
     runs-on: ubuntu-latest
     steps:
