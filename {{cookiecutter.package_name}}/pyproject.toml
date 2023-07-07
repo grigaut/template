@@ -1,12 +1,14 @@
 [tool.poetry]
-name = "{{cookiecutter.project_name}}"
-version = "{{cookiecutter.version}}"
-description = ""
-authors = ["{{cookiecutter.author}}"]
+name = "{{ cookiecutter.package_name }}"
+version = "{{ cookiecutter.version }}"
+description = "{{ cookiecutter.short_description }}"
+authors = ["{{ cookiecutter.author }} <{{ cookiecutter.email }}>"]
+# Use identifier from https://spdx.org/licenses/
+license = "{{ cookiecutter.license }}"
 readme = "README.md"
 
 packages = [
-    { include = "{{cookiecutter.project_name|lower|replace('-', '_')}}", from = "src" },
+    { include = "{{cookiecutter.package_name|lower|replace('-', '_')}}", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -14,32 +16,35 @@ python = "{{cookiecutter.compatible_python_versions}}"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-pre-commit = "^3.2.2"
-ruff = "^0.0.263"
-pydocstyle = "^6.3.0"
-interrogate = "^1.5.0"
+black = "*"
+pre-commit = "*"
+ruff = "*"
+pydocstyle = "*"
+interrogate = "*"
 
 
 [tool.poetry.group.docs.dependencies]
-mkdocs = "^1.4.2"
-mkdocs-gen-files = "^0.4.0"
-mkdocs-literate-nav = "^0.6.0"
-mkdocs-autorefs = "^0.4.1"
-mkdocs-material = "^9.1.8"
-mkdocstrings = { extras = ["python"], version = "^0.21.2" }
+mkdocs = "*"
+mkdocs-gen-files = "*"
+mkdocs-literate-nav = "*"
+mkdocs-autorefs = "*"
+mkdocs-material = "*"
+mkdocstrings = { extras = ["python"], version = "*" }
+mkdocs-macros-plugin = "*"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
+target-version = ['py311']
 line-length = 79
 
 [tool.ruff]
 line-length = 79
 target-version = "py311"
 select = ["ALL"]
+lines-after-imports = 2
 ignore = [
     # flake8-boolean-trap
     "FBT",
@@ -102,13 +107,13 @@ testpaths = ["tests"]
 
 [tool.coverage.paths]
 source = [
-    "{{cookiecutter.project_name|lower|replace('-', '_')}}",
+    "{{cookiecutter.package_name|lower|replace('-', '_')}}",
     "*/site-packages",
 ]
 
 [tool.coverage.run]
 branch = true
-source = ["{{cookiecutter.project_name|lower|replace('-', '_')}}"]
+source = ["{{cookiecutter.package_name|lower|replace('-', '_')}}"]
 
 [tool.coverage.report]
 show_missing = true

@@ -1,0 +1,67 @@
+site_name: {{cookiecutter.package_name}}
+# Add repository metadate for more integration and ease-of-use
+repo_name: {{cookiecutter.package_name}}
+# repo_url: https://github.com/usr/{{cookiecutter.package_name}}
+
+theme:
+  name: "material"
+  features:
+    - navigation.tabs               # Tabs
+    - navigation.tabs.sticky        # Above tabs stay displayed
+    - navigation.indexes            # Attach documents to sections
+    - navigation.instant
+    - navigation.footer
+    - navigation.top                # Scroll back to top button
+    - content.code.annotate         # Admonitions
+    - content.code.copy             # copy code block
+    - watch:
+        - "src/{{cookiecutter.package_name|lower|replace('-', '_')}}"
+
+nav:
+  - Code Reference: reference/
+
+plugins:
+  - autorefs
+  - search                                      # Search bar
+  - macros                                      # Use variables in documentation
+  - literate-nav:
+      nav_file: SUMMARY.md                      # To auto-generate paths
+  - gen-files:
+      scripts:
+        - docs/scripts/pages_generator.py       # To auto generate 'Code Reference' Section
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            # General Options
+            # Headings Options
+            heading_level: 3                    # Heading size
+            # Members Options
+            members_order: source               # Member sorting
+            # Docstrings Options
+            docstring_style: numpy              # To parse docstrings
+            docstring_section_style: table      # Display section format
+            merge_init_into_class: true         # Merge __init__ docstring in Class'
+            show_if_no_docstring: true          # Show even if no docstring
+
+
+markdown_extensions:
+  - admonition
+  - pymdownx.superfences      # code blocks
+  - pymdownx.details
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true   # Tabs
+  - footnotes
+  - toc:
+      permalink: true
+  - attr_list
+  - md_in_html
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+
+# extra:
+#   repo_tree: https://github.com/usr/{{cookiecutter.package_name}}/tree/main
+#   repo_blob: https://github.com/usr/{{cookiecutter.package_name}}/blob/main

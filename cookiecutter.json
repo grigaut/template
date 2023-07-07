@@ -1,6 +1,11 @@
 {
-    "project_name": "",
+    "author": "Gaétan Rigaut",
+    "email": "gaetanrigaut.s@gmail.com",
+    "github_user": "grigaut",
+    "package_name": "example-project",
+    "module_name": "{{ cookiecutter.package_name|lower|replace('-', '_') }}",
+    "short_description": "",
+    "compatible_python_versions": "^3.11",
     "version": "0.1.0",
-    "author": "",
-    "compatible_python_versions": "^3.11"
+    "license": "MIT"
 }
