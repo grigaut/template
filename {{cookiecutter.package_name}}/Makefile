@@ -1,5 +1,5 @@
-GLOBAL_PYTHON := ${shell}command -v python 2> /dev/null)
-GLOBAL_POETRY := ${shell}command -v poetry 2> /dev/null)
+GLOBAL_PYTHON := $(shell command -v python 2> /dev/null)
+GLOBAL_POETRY := $(shell command -v poetry 2> /dev/null)
 
 VIRTUAL_ENV = .venv
 HOOKS = .git/hooks
