@@ -1,7 +1,7 @@
 site_name: {{cookiecutter.package_name}}
 # Add repository metadate for more integration and ease-of-use
 repo_name: {{cookiecutter.package_name}}
-# repo_url: https://github.com/usr/{{cookiecutter.package_name}}
+repo_url: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}
 
 theme:
   name: "material"
@@ -62,6 +62,6 @@ markdown_extensions:
       emoji_generator: !!python/name:materialx.emoji.to_svg
 
 
-# extra:
-#   repo_tree: https://github.com/usr/{{cookiecutter.package_name}}/tree/main
-#   repo_blob: https://github.com/usr/{{cookiecutter.package_name}}/blob/main
+extra:
+  repo_tree: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}/tree/main
+  repo_blob: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}/blob/main
