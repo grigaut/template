@@ -42,7 +42,6 @@ line-length = 79
 line-length = 79
 target-version = "py311"
 select = ["ALL"]
-lines-after-imports = 2
 ignore = [
     # flake8-boolean-trap
     "FBT",
