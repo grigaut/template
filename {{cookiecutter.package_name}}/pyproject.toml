@@ -15,15 +15,17 @@ python = "{{cookiecutter.compatible_python_versions}}"
 
 [tool.poetry.group.dev.dependencies]
 black = "*"
+ruff = "*"
+mypy = "*"
 pre-commit = "*"
 pre-commit-hooks = "*"
-ruff = "*"
+{% if cookiecutter.include_tests -%}
 pytest = "*"
 coverage = { extras = ["toml"], version = "*" }
 pytest-cov = "*"
 pytest-mock = "*"
-
-
+{% endif %}
+{% if cookiecutter.include_docs %}
 [tool.poetry.group.docs.dependencies]
 mkdocs = "*"
 mkdocs-gen-files = "*"
@@ -32,7 +34,7 @@ mkdocs-autorefs = "*"
 mkdocs-material = "*"
 mkdocstrings = { extras = ["python"], version = "*" }
 mkdocs-macros-plugin = "*"
-
+{% endif %}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
@@ -78,7 +80,7 @@ unfixable = [
     # found comented-out code
     "ERA001",
 ]
-
+{% if cookiecutter.include_tests %}
 [tool.pytest.ini_options]
 addopts = ["--import-mode=importlib", "--cov"]
 testpaths = ["tests"]
@@ -92,3 +94,4 @@ source = ["{{cookiecutter.module_name}}"]
 
 [tool.coverage.report]
 show_missing = true
+{% endif -%}

@@ -1,7 +1,9 @@
 site_name: {{cookiecutter.package_name}}
 # Add repository metadate for more integration and ease-of-use
+{% if not cookiecutter.is_project_only_local -%}
 repo_name: {{cookiecutter.package_name}}
 repo_url: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}
+{% endif -%}
 
 theme:
   name: "material"
@@ -58,7 +60,8 @@ markdown_extensions:
   - attr_list
   - md_in_html
 
-
+{% if not cookiecutter.is_project_only_local %}
 extra:
   repo_tree: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}/tree/main
   repo_blob: https://github.com/{{cookiecutter.github_user}}/{{cookiecutter.package_name}}/blob/main
+{% endif -%}

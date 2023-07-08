@@ -1,4 +1,4 @@
-name: Tests
+name:  Linting
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  Pytest:
+  Linting:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m poetry install --with dev
-      - name: Run pytest
+      - name: Install pre-commit
         run: |
-          python -m poetry run python -m pytest
+          python -m poetry run pre-commit install
+      - name: Run pre-commit
+        run: SKIP=no-commit-to-branch python -m poetry run pre-commit run --all-files
+  

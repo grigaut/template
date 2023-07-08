@@ -1,41 +1,24 @@
 GLOBAL_PYTHON := $(shell command -v python 2> /dev/null)
 GLOBAL_POETRY := $(shell command -v poetry 2> /dev/null)
 
-DEFAULT_ENV := .venv
 HOOKS = .git/hooks
-
-
-CURRENT_ENV := $(shell command -v ${GLOBAL_POETRY} env info --path 2> /dev/null)
-
-ifdef CURRENT_ENV
-	VIRTUAL_ENV = $(shell ${GLOBAL_POETRY} env info --path)
-else
-	VIRTUAL_VENV = DEFAULT_ENV
-endif
-
-ifeq (${OS}, Windows_NT)
-	BIN = ${VIRTUAL_ENV}/Scripts/
-else
-	BIN = ${VIRTUAL_ENV}/bin/
-endif
 
 # Main Rules
 
 clean:
-	rm -rf ${VIRTUAL_ENV}
+	rm -rf ${GLOBAL_POETRY} env remove
 	rm -rf ${HOOKS}
 
-# Poetry Tatgets
+# Poetry Targets
 
+.PHONY: check-poetry
 check-poetry: pyproject.toml
 	@if [ -z ${GLOBAL_POETRY} ]; then echo "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
 	${GLOBAL_POETRY} lock --no-update
 
+.PHONY: install-poetry
 install-poetry:
 	curl -sSL https://install.python-poetry.org | ${GLOBAL_PYTHON} -
-
-${VIRTUAL_ENV}:
-	${PYTHON} -m venv ${VIRTUAL_ENV}
 
 .PHONY: poetry-install
 poetry-install:
@@ -44,7 +27,6 @@ poetry-install:
 
 .PHONY: install
 install:
-	${MAKE} -s ${VIRTUAL_ENV}
 	${MAKE} -s poetry-install
 
 # Development Rules
@@ -54,21 +36,27 @@ poetry-install-dev:
 	${MAKE} -s check-poetry
 	${GLOBAL_POETRY} install --ansi
 
+{% if not cookiecutter.is_project_only_local -%}
 .PHONY: hooks_install
 hooks-install: .pre-commit-config.yaml
-	${BIN}pre-commit install
+	${GLOBAL_POETRY} run pre-commit install
+{% endif -%}
 
-.PHONY: install
+.PHONY: install-dev
 install-dev:
-	${MAKE} -s ${VIRTUAL_ENV}
 	${MAKE} -s poetry-install-dev
+{% if not cookiecutter.is_project_only_local -%}
 	${MAKE} -s hooks-install
+{% endif -%}
+{% if cookiecutter.include_tests %}
+# Test Rules
 
 .PHONY: tests
 tests:
 	${MAKE} -s install-dev
-	${BIN}pytest
-
+	${GLOBAL_POETRY} run pytest
+{% endif %}
+{% if cookiecutter.include_docs %}
 # Documentation Rules
 
 .PHONY: poetry-install-docs
@@ -79,24 +67,25 @@ poetry-install-docs:
 
 .PHONY: install-docs
 install-docs:
-	${MAKE} -s ${VIRTUAL_ENV}
 	${MAKE} -s poetry-install-docs
 
 .PHONY: view-docs
 view-docs:
 	${MAKE} -s install-docs
-	${BIN}mkdocs serve
+	${GLOBAL_POETRY} run mkdocs serve
 
 ./site:
 	${MAKE} -s install-docs
-	${BIN}mkdocs build
+	${GLOBAL_POETRY} run mkdocs build
 
 .PHONY: build-docs
 build-docs:
 	${MAKE} -s ./site
-
+{% if not cookiecutter.is_project_only_local %}
 .PHONY: deploy-docs
 deploy-docs:
 	${MAKE} -s install-docs
-	${BIN}mkdocs gh-deploy
+	${GLOBAL_POETRY} run mkdocs gh-deploy
 	rm -r -f ./site
+{% endif -%}
+{% endif -%}
