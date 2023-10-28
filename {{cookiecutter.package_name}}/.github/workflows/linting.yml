@@ -34,4 +34,3 @@ jobs:
           python -m poetry run pre-commit install
       - name: Run pre-commit
         run: SKIP=no-commit-to-branch python -m poetry run pre-commit run --all-files
-  

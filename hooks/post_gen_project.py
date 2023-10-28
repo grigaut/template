@@ -13,16 +13,19 @@ path = Path(os.getcwd())
 parent_path = path.parent.absolute()
 package_path = parent_path.joinpath("{{cookiecutter.package_name}}")
 
+
 def remove(filepath: Path) -> None:
     if filepath.is_file():
         os.remove(filepath)
     elif filepath.is_dir():
         shutil.rmtree(filepath)
 
+
 features = {
     "docs": "{{cookiecutter.include_docs}}" == "True",
     "tests": "{{cookiecutter.include_tests}}" == "True",
-    "github_actions": "{{cookiecutter.include_github_actions}}" == "True" and "{{cookiecutter.is_project_only_local}}" != "True",
+    "github_actions": "{{cookiecutter.include_github_actions}}" == "True"
+    and "{{cookiecutter.is_project_only_local}}" != "True",
 }
 
 if not features["docs"]:
