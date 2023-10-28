@@ -32,7 +32,7 @@ check-poetry: pyproject.toml
 .PHONY: install-poetry
 install-poetry:
 	@echo -e "  ${CONSTRUCTION} ${PURPLE}Installing Poetry...${NOCOLOR} ${CONSTRUCTION}"
-	@curl -sSL https://install.python-poetry.org | ${GLOBAL_PYTHON} -ansi
+	@curl -sSL https://install.python-poetry.org | ${GLOBAL_PYTHON}
 	@echo -e "  ${VALID} ${GREEN}Successful Installation of Poetry${NOCOLOR} ${VALID}"
 
 .PHONY: poetry-install

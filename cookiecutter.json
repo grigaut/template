@@ -5,7 +5,7 @@
     "package_name": "example-project",
     "module_name": "{{ cookiecutter.package_name|lower|replace('-', '_') }}",
     "short_description": "",
-    "compatible_python_versions": "^3.11",
+    "compatible_python_versions": "^3.11, <3.13",
     "version": "0.1.0",
     "license": ["MIT license", "BSD license", "ISC license", "Apache Software License 2.0", "GNU General Public License v3", "Not open source"],
     "include_docs": [true, false],
