@@ -47,20 +47,20 @@ check-pyenv:
 	@${MAKE} -s _completed-task-message message="Valid Installation"
 
 .PHONY: pyenv-install
-pyenv-install: 
+pyenv-install:
 	@${MAKE} -s _starting-task-message message="Installing Python ${version} using Pyenv..."
 	@${MAKE} -s check-pyenv
 	${GLOBAL_PYENV} install --skip-existing $(version)
 	@${MAKE} -s _completed-task-message message="Installation Completed"
 
 .PHONY: pyenv-local
-pyenv-local: 
+pyenv-local:
 	@${MAKE} -s _starting-task-message message="Setting Python ${version} as local version..."
 	@${MAKE} -s check-pyenv
 	${GLOBAL_PYENV} local $(version)
 	@${MAKE} -s _completed-task-message message="Local Python Version Set to ${version} "
 
-.PHONY: 
+.PHONY: pyenv-set-up
 pyenv-set-up:
 	@${MAKE} -s pyenv-install version=$(PYTHON_TARGET_VERSION)
 	@${MAKE} -s pyenv-local version=$(PYTHON_TARGET_VERSION)

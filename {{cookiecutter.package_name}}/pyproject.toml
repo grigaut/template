@@ -48,6 +48,10 @@ line-length = 79
 target-version = "py311"
 select = ["ALL"]
 ignore = [
+    #no-blank-line-before-class
+    "D211",
+    #multi-line-summary-second-line
+    "D213",
     # flake8-boolean-trap
     "FBT",
     # bandit
