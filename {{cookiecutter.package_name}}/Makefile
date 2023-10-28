@@ -87,6 +87,16 @@ poetry-install:
 	@${GLOBAL_POETRY} install --only main --ansi
 	@${MAKE} -s _completed-task-message message="Successful Installation of Main Dependencies"
 
+requirements.txt: poetry.lock
+	@${MAKE} -s _starting-task-message message="Exporting Dependencies to requirements.txt..."
+	@${MAKE} -s check-poetry
+	@${GLOBAL_POETRY} export -f requirements.txt -o requirements.txt --with dev,docs --without-hashes
+	@${MAKE} -s _completed-task-message message="Successful Export"
+
+.PHONY: poetry-export
+poetry-export:
+	@${MAKE} -s requirements.txt
+
 # Development Rules
 
 .PHONY: poetry-install-dev
