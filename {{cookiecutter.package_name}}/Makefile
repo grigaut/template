@@ -34,7 +34,7 @@ install:
 install-dev:
 	@${MAKE} -s pyenv-set-up
 	@${MAKE} -s poetry-install-dev
-{% if not cookiecutter.is_project_only_local -%}
+{% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s hooks-install
 {% endif -%}
 
