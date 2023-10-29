@@ -25,7 +25,8 @@ def remove(filepath: Path) -> None:
 features = {
     "docs": "{{cookiecutter.include_docs}}" == "True",
     "tests": "{{cookiecutter.include_tests}}" == "True",
-    "github_actions": "{{cookiecutter.include_github_actions}}" == "True",
+    "github_actions": "{{cookiecutter.include_github_actions}}" == "True" 
+    and "{{cookiecutter.is_on_github}}" == "True",
     "notebooks": "{{cookiecutter.include_notebooks}}" == "True",
 }
 
