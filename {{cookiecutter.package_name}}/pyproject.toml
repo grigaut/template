@@ -14,7 +14,7 @@ python = "{{cookiecutter.compatible_python_versions}}"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "*"
+black = {extras = ["jupyter"], version = "*"}
 ruff = "*"
 mypy = "*"
 pre-commit = "*"
@@ -27,9 +27,7 @@ pytest-mock = "*"
 {% endif -%}
 {% if cookiecutter.include_notebooks -%}
 ipykernel = "*"
-{% if not cookiecutter.is_project_only_local -%}
 nbstripout = "*"
-{% endif -%}
 {% endif -%}
 {% if cookiecutter.include_docs %}
 [tool.poetry.group.docs.dependencies]

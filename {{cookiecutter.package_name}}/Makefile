@@ -21,9 +21,7 @@ FIRE:=\U1F525
 
 all:
 	@${MAKE} -s install-dev
-{% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s .git
-{% endif -%}
 
 clean:
 	@rm -rf ${GLOBAL_POETRY} env remove
@@ -42,9 +40,7 @@ install:
 install-dev:
 	@${MAKE} -s pyenv-set-up
 	@${MAKE} -s poetry-install-dev
-{% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s hooks-install
-{% endif %}
 	@${MAKE} -s _informative-message message="To run a command within poetry's environment, prefix it with 'poetry run'"
 
 # Pyenv
@@ -118,13 +114,11 @@ poetry-export:
 poetry-install-dev:
 	@${MAKE} -s .venv
 
-{% if not cookiecutter.is_project_only_local -%}
 .PHONY: hooks_install
 hooks-install: .pre-commit-config.yaml .venv
 	@${MAKE} -s _starting-task-message message="Installing Pre-Commit Hooks..."
 	@${GLOBAL_POETRY} run pre-commit install
 	@${MAKE} -s _completed-task-message message="Successful Installation of Hooks"
-{% endif -%}
 {% if cookiecutter.include_tests %}
 # Test Rules
 
@@ -163,7 +157,7 @@ view-docs:
 .PHONY: build-docs
 build-docs:
 	@${MAKE} -s ./site
-{% if not cookiecutter.is_project_only_local %}
+{% if cookiecutter.is_on_github %}
 .PHONY: deploy-docs
 deploy-docs:
 	@${MAKE} -s _starting-task-message message="Deploying Docs To Github..."
@@ -173,7 +167,6 @@ deploy-docs:
 	rm -r -f ./site
 {% endif -%}
 {% endif -%}
-{% if not cookiecutter.is_project_only_local %}
 # Git
 
 .PHONY: check-git
@@ -195,7 +188,6 @@ enable-nbstripout: .venv
 	@${MAKE} -s _starting-task-message message="Enabling nbstripout..."
 	@${GLOBAL_POETRY} run nbstripout --install
 	@${MAKE} -s _completed-task-message message="Enabled"
-{% endif -%}
 {% endif -%}
 # Verbose
 

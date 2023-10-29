@@ -13,5 +13,5 @@
     "include_docs": [true, false],
     "include_tests": [true, false],
     "include_github_actions": [true, false],
-    "is_project_only_local": [false, true]
+    "is_on_github": [true, false]
 }
