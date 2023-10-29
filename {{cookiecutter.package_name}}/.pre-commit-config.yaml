@@ -39,11 +39,11 @@ repos:
         language: python
         types: [text]
 
-      - id: black
-        name: black
+      - id: black-jupyter
+        name: Black for Jupyter
         entry: black
         language: system
-        types: [python]
+        types: [jupyter]
         require_serial: true
 
       - id: ruff
