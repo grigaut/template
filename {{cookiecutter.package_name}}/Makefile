@@ -1,5 +1,6 @@
 GLOBAL_PYTHON := $(shell command -v python 2> /dev/null)
 GLOBAL_POETRY := $(shell command -v poetry 2> /dev/null)
+GLOBAL_GIT := $(shell command -v git 2> /dev/null)
 GLOBAL_PYENV := $(shell command -v pyenv 2> /dev/null)
 
 PYTHON_TARGET_VERSION := {{cookiecutter.python_local_version}}
@@ -20,6 +21,9 @@ FIRE:=\U1F525
 
 all:
 	@${MAKE} -s install-dev
+{% if not cookiecutter.is_project_only_local %}
+	@${MAKE} -s .git
+{% endif -%}
 
 clean:
 	@rm -rf ${GLOBAL_POETRY} env remove
@@ -72,6 +76,12 @@ pyenv-set-up:
 
 # Poetry Targets
 
+.venv:
+	@${MAKE} -s _starting-task-message message="Installing All Dependencies..."
+	@${MAKE} -s check-poetry
+	@${GLOBAL_POETRY} install --ansi
+	@${MAKE} -s _completed-task-message message="Successful Installation of All Dependencies"
+
 .PHONY: check-poetry
 check-poetry: pyproject.toml
 	@${MAKE} -s _starting-task-message message="Checking Poetry Configuration..."
@@ -106,14 +116,11 @@ poetry-export:
 
 .PHONY: poetry-install-dev
 poetry-install-dev:
-	@${MAKE} -s _starting-task-message message="Installing All Dependencies..."
-	@${MAKE} -s check-poetry
-	@${GLOBAL_POETRY} install --ansi
-	@${MAKE} -s _completed-task-message message="Successful Installation of All Dependencies"
+	@${MAKE} -s .venv
 
 {% if not cookiecutter.is_project_only_local -%}
 .PHONY: hooks_install
-hooks-install: .pre-commit-config.yaml
+hooks-install: .pre-commit-config.yaml .venv
 	@${MAKE} -s _starting-task-message message="Installing Pre-Commit Hooks..."
 	@${GLOBAL_POETRY} run pre-commit install
 	@${MAKE} -s _completed-task-message message="Successful Installation of Hooks"
@@ -122,9 +129,8 @@ hooks-install: .pre-commit-config.yaml
 # Test Rules
 
 .PHONY: tests
-tests:
+tests: .venv
 	@${MAKE} -s _starting-task-message message="Running Tests..."
-	@${MAKE} -s install-dev
 	@${GLOBAL_POETRY} run pytest
 	@${MAKE} -s _completed-task-message message="Tests Completed"
 {% endif %}
@@ -165,6 +171,30 @@ deploy-docs:
 	@${GLOBAL_POETRY} run mkdocs gh-deploy
 	@${MAKE} -s _completed-task-message message="Successful Deployment"
 	rm -r -f ./site
+{% endif -%}
+{% endif -%}
+{% if not cookiecutter.is_project_only_local %}
+# Git
+
+.PHONY: check-git
+check-git:
+	@${MAKE} -s _starting-task-message message="Checking Git Installation..."
+	@if [ -z ${GLOBAL_GIT} ]; then echo -e "Git is not installed on your computer. Check 'https://git-scm.com/downloads' to install git."; exit 2 ;fi
+	@${MAKE} -s _completed-task-message message="Valid Installation"
+
+.git:
+	@${MAKE} -s check-git
+	@${MAKE} -s _starting-task-message message="Git Repository Initialisation..."
+	@${GLOBAL_GIT} init
+	@${MAKE} -s _completed-task-message message="Repository Initialisation Completed"
+{% if not cookiecutter.is_project_only_local %}
+	@${MAKE} -s enable-nbstripout
+
+.PHONY: enable-nb-stripout
+enable-nb-stripout: .venv
+	@${MAKE} -s _starting-task-message message="Enabling nbstripout..."
+	@${GLOBAL_POETRY} run nbstripout --install
+	@${MAKE} -s _completed-task-message message="Enabled"
 {% endif -%}
 {% endif -%}
 # Verbose

@@ -25,6 +25,9 @@ coverage = { extras = ["toml"], version = "*" }
 pytest-cov = "*"
 pytest-mock = "*"
 {% endif %}
+{% if cookiecutter.with_notebooks -%}
+nbstripout = "*"
+{% endif %}
 {% if cookiecutter.include_docs %}
 [tool.poetry.group.docs.dependencies]
 mkdocs = "*"
