@@ -44,7 +44,7 @@ install-dev:
 	@${MAKE} -s poetry-install-dev
 {% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s hooks-install
-{% endif -%}
+{% endif %}
 	@${MAKE} -s _informative-message message="To run a command within poetry's environment, prefix it with 'poetry run'"
 
 # Pyenv

@@ -24,13 +24,13 @@ pytest = "*"
 coverage = { extras = ["toml"], version = "*" }
 pytest-cov = "*"
 pytest-mock = "*"
-{% endif %}
+{% endif -%}
 {% if cookiecutter.include_notebooks -%}
 ipykernel = "*"
 {% if not cookiecutter.is_project_only_local -%}
 nbstripout = "*"
-{% endif %}
-{% endif %}
+{% endif -%}
+{% endif -%}
 {% if cookiecutter.include_docs %}
 [tool.poetry.group.docs.dependencies]
 mkdocs = "*"
