@@ -187,7 +187,7 @@ check-git:
 	@${MAKE} -s _starting-task-message message="Git Repository Initialisation..."
 	@${GLOBAL_GIT} init
 	@${MAKE} -s _completed-task-message message="Repository Initialisation Completed"
-{% if not cookiecutter.is_project_only_local %}
+{% if not cookiecutter.include_notebooks %}
 	@${MAKE} -s enable-nbstripout
 
 .PHONY: enable-nbstripout

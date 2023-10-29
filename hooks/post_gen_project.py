@@ -1,4 +1,4 @@
-"""Script run after porject generation."""
+"""Script run after project generation."""
 
 
 import os
@@ -26,6 +26,7 @@ features = {
     "tests": "{{cookiecutter.include_tests}}" == "True",
     "github_actions": "{{cookiecutter.include_github_actions}}" == "True"
     and "{{cookiecutter.is_project_only_local}}" != "True",
+    "notebooks": "{{cookiecutter.include_notebooks}}" == "True",
 }
 
 if not features["docs"]:
@@ -37,3 +38,5 @@ if not features["tests"]:
     remove(package_path.joinpath(".github/workflows/tests.yml"))
 if not features["github_actions"]:
     remove(package_path.joinpath(".github"))
+if not features["notebooks"]:
+    remove(package_path.joinpath("notebooks"))

@@ -25,7 +25,7 @@ coverage = { extras = ["toml"], version = "*" }
 pytest-cov = "*"
 pytest-mock = "*"
 {% endif %}
-{% if cookiecutter.with_notebooks -%}
+{% if cookiecutter.include_notebooks -%}
 ipykernel = "*"
 nbstripout = "*"
 {% endif %}
