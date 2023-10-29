@@ -190,8 +190,8 @@ check-git:
 {% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s enable-nbstripout
 
-.PHONY: enable-nb-stripout
-enable-nb-stripout: .venv
+.PHONY: enable-nbstripout
+enable-nbstripout: .venv
 	@${MAKE} -s _starting-task-message message="Enabling nbstripout..."
 	@${GLOBAL_POETRY} run nbstripout --install
 	@${MAKE} -s _completed-task-message message="Enabled"

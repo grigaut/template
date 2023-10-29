@@ -26,6 +26,7 @@ pytest-cov = "*"
 pytest-mock = "*"
 {% endif %}
 {% if cookiecutter.with_notebooks -%}
+ipykernel = "*"
 nbstripout = "*"
 {% endif %}
 {% if cookiecutter.include_docs %}
