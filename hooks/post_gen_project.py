@@ -3,6 +3,7 @@
 
 import os
 import shutil
+from colorama import Fore
 
 from pathlib import Path
 
@@ -40,3 +41,6 @@ if not features["github_actions"]:
     remove(package_path.joinpath(".github"))
 if not features["notebooks"]:
     remove(package_path.joinpath("notebooks"))
+
+print(f"\U0001F525{Fore.BLUE} Sucessfully created from template!\U0001F525")
+print(f"\U0001F525{Fore.BLUE} Run `make all` to install everything!\U0001F525")
