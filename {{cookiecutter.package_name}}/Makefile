@@ -8,11 +8,13 @@ HOOKS = .git/hooks
 
 # Colors and Emojis
 
-PURPLE:=\e[0;35m
-GREEN:=\e[0;32m
+PURPLE:=\e[0;95m
+GREEN:=\e[0;92m
+BLUE:=\e[0;94m
 NOCOLOR:=\033[0m
 CONSTRUCTION:=\U1F6A7
 VALID:=\U2705
+FIRE:=\U1F525
 
 # Main Rules
 
@@ -22,6 +24,7 @@ all:
 clean:
 	@rm -rf ${GLOBAL_POETRY} env remove
 	@rm -rf ${HOOKS}
+	@${MAKE} -s _informative-message message="Virtual Environment and Hooks have been removed"
 
 # Installation Rules
 
@@ -29,6 +32,7 @@ clean:
 install:
 	@${MAKE} -s pyenv-set-up
 	@${MAKE} -s poetry-install
+	@${MAKE} -s _informative-message message="To run a command within poetry's environment, prefix it with 'poetry run'"
 
 .PHONY: install-dev
 install-dev:
@@ -37,6 +41,7 @@ install-dev:
 {% if not cookiecutter.is_project_only_local %}
 	@${MAKE} -s hooks-install
 {% endif -%}
+	@${MAKE} -s _informative-message message="To run a command within poetry's environment, prefix it with 'poetry run'"
 
 # Pyenv
 
@@ -171,3 +176,7 @@ _starting-task-message:
 .PHONY: _completed-task-message
 _completed-task-message:
 	@echo -e "  ${VALID} ${GREEN}$(message)${NOCOLOR} ${VALID}"
+
+.PHONY: _informative-message
+_informative-message:
+	@echo -e "  ${FIRE} ${BLUE}$(message)${NOCOLOR} ${FIRE}"
