@@ -17,7 +17,7 @@ python = "{{cookiecutter.compatible_python_versions}}"
 black = {extras = ["jupyter"], version = "*"}
 ruff = "*"
 mypy = "*"
-ic = "*"
+icecream = "*"
 pre-commit = "*"
 pre-commit-hooks = "*"
 {% if cookiecutter.include_tests -%}
