@@ -11,12 +11,12 @@ packages = [{ include = "{{cookiecutter.module_name}}", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "{{cookiecutter.compatible_python_versions}}"
+icecream = "*"
 
 
 [tool.poetry.group.dev.dependencies]
 black = {extras = ["jupyter"], version = "*"}
 ruff = "*"
-icecream = "*"
 pre-commit = "*"
 pre-commit-hooks = "*"
 {% if cookiecutter.include_tests -%}
