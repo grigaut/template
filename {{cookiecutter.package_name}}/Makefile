@@ -5,7 +5,13 @@ GLOBAL_PYENV := $(shell command -v pyenv 2> /dev/null)
 
 PYTHON_TARGET_VERSION := {{cookiecutter.python_local_version}}
 
-HOOKS = .git/hooks
+# Paths
+VENV_DIRECTORY := ${PWD}/.venv
+GIT_DIRECTORY := ${PWD}/.git
+HOOKS_DIRECTORY := ${GIT_DIRECTORY}/hooks
+{% if cookiecutter.include_docs %}
+DOCS_SITE_DIRECTORY := ${PWD}/site
+{% endif -%}
 
 # Colors and Emojis
 
@@ -24,8 +30,8 @@ all:
 	@${MAKE} -s .git
 
 clean:
-	@rm -rf ${GLOBAL_POETRY} env remove
-	@rm -rf ${HOOKS}
+	@rm -rf ${VENV_DIRECTORY}
+	@rm -rf ${HOOKS_DIRECTORY}
 	@${MAKE} -s _informative-message message="Virtual Environment and Hooks have been removed"
 
 # Installation Rules
@@ -72,7 +78,7 @@ pyenv-set-up:
 
 # Poetry Targets
 
-.venv:
+${VENV_DIRECTORY}:
 	@${MAKE} -s _starting-task-message message="Installing All Dependencies..."
 	@${MAKE} -s check-poetry
 	@${GLOBAL_POETRY} install --ansi
@@ -112,10 +118,10 @@ poetry-export:
 
 .PHONY: poetry-install-dev
 poetry-install-dev:
-	@${MAKE} -s .venv
+	@${MAKE} -s ${VENV_DIRECTORY}
 
 .PHONY: hooks_install
-hooks-install: .pre-commit-config.yaml .venv
+hooks-install: .pre-commit-config.yaml ${VENV_DIRECTORY}
 	@${MAKE} -s _starting-task-message message="Installing Pre-Commit Hooks..."
 	@${GLOBAL_POETRY} run pre-commit install
 	@${MAKE} -s _completed-task-message message="Successful Installation of Hooks"
@@ -123,7 +129,7 @@ hooks-install: .pre-commit-config.yaml .venv
 # Test Rules
 
 .PHONY: tests
-tests: .venv
+tests: ${VENV_DIRECTORY}
 	@${MAKE} -s _starting-task-message message="Running Tests..."
 	@${GLOBAL_POETRY} run pytest
 	@${MAKE} -s _completed-task-message message="Tests Completed"
@@ -148,7 +154,7 @@ view-docs:
 	@${MAKE} -s install-docs
 	@${GLOBAL_POETRY} run mkdocs serve
 
-./site:
+${DOCS_SITE_DIRECTORY}:
 	@${MAKE} -s _starting-task-message message="Building Local Docs Folder..."
 	@${MAKE} -s install-docs
 	@${GLOBAL_POETRY} run mkdocs build
@@ -156,7 +162,7 @@ view-docs:
 
 .PHONY: build-docs
 build-docs:
-	@${MAKE} -s ./site
+	@${MAKE} -s ${DOCS_SITE_DIRECTORY}
 {% if cookiecutter.is_on_github %}
 .PHONY: deploy-docs
 deploy-docs:
@@ -164,7 +170,7 @@ deploy-docs:
 	@${MAKE} -s install-docs
 	@${GLOBAL_POETRY} run mkdocs gh-deploy
 	@${MAKE} -s _completed-task-message message="Successful Deployment"
-	rm -r -f ./site
+	@rm -rf ${DOCS_SITE_DIRECTORY}
 {% endif -%}
 {% endif -%}
 # Git
@@ -184,7 +190,7 @@ check-git:
 	@${MAKE} -s enable-nbstripout
 
 .PHONY: enable-nbstripout
-enable-nbstripout: .venv
+enable-nbstripout: ${VENV_DIRECTORY}
 	@${MAKE} -s _starting-task-message message="Enabling nbstripout..."
 	@${GLOBAL_POETRY} run nbstripout --install
 	@${MAKE} -s _completed-task-message message="Enabled"
