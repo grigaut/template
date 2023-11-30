@@ -106,7 +106,6 @@ install-poetry:
 check-poetry: ${PYPROJECT}
 	@${MAKE} -s _starting-task-message message="Checking Poetry Configuration..."
 	@if [ -z ${GLOBAL_POETRY} ]; then echo -e "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
-	@${GLOBAL_POETRY} check --lock --ansi
 	@${MAKE} -s _completed-task-message message="Valid Configuration"
 
 ${PYVENV_CONFIG}:
@@ -116,7 +115,12 @@ ${PYVENV_CONFIG}:
 	@${GLOBAL_POETRY} env use $(subst \,/, $(shell command ${GLOBAL_PYENV} which python))
 	@${MAKE} -s _completed-task-message message="Set Up of Poetry's Python Version Completed."
 
-${INSTALLED}: ${PYVENV_CONFIG} ${POETRY_LOCK}
+${POETRY_LOCK}: ${PYVENV_CONFIG}
+	@${MAKE} -s _starting-task-message message="Creating poetry.lock..."
+	@${GLOBAL_POETRY} lock --no-update --ansi
+	@${MAKE} -s _completed-task-message message="Created"
+
+${INSTALLED}: ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Installing Main Dependencies..."
 	@${GLOBAL_POETRY} install --ansi
 	@touch ${INSTALLED}
@@ -125,20 +129,20 @@ ${INSTALLED}: ${PYVENV_CONFIG} ${POETRY_LOCK}
 .PHONY: poetry-export
 poetry-export: ${REQUIREMENTS}
 
-${REQUIREMENTS}: ${POETRY_LOCK} ${PYVENV_CONFIG}
+${REQUIREMENTS}: ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Exporting Dependencies to requirements.txt..."
 	@${GLOBAL_POETRY} export -f requirements.txt -o requirements.txt --without-hashes
 	@${MAKE} -s _completed-task-message message="Successful Export"
 
 # Development Rules
 
-${DEV_INSTALLED}: ${PYVENV_CONFIG} ${POETRY_LOCK}
+${DEV_INSTALLED}: ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Installing All Dependencies..."
 	@${GLOBAL_POETRY} install --ansi
 	@touch ${DEV_INSTALLED}
 	@${MAKE} -s _completed-task-message message="Successful Installation of All Dependencies"
 
-${HOOKS_DIRECTORY}: ${PRE_COMMIT_CONFIG} ${DEV_INSTALLED} ${GIT_DIRECTORY}
+${HOOKS_DIRECTORY}: ${PRE_COMMIT_CONFIG} ${POETRY_LOCK} ${GIT_DIRECTORY}
 	@${MAKE} -s _starting-task-message message="Installing Pre-Commit Hooks..."
 	@${GLOBAL_POETRY} run pre-commit install
 	@${MAKE} -s _completed-task-message message="Successful Installation of Hooks"
@@ -154,7 +158,7 @@ tests: ${DEV_INSTALLED}
 {% if cookiecutter.include_docs %}
 # Documentation Rules
 
-${DOCS_INSTALLED}: ${PYVENV_CONFIG} ${POETRY_LOCK}
+${DOCS_INSTALLED}: ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Installing Docs Dependencies..."
 	@${GLOBAL_POETRY} install --only docs --ansi
 	@${MAKE} -s _completed-task-message message="Successful Installation of Docs Dependencies"
@@ -164,7 +168,7 @@ view-docs: ${DOCS_INSTALLED}
 	@${MAKE} -s _starting-task-message message="Serving Docs On Local Port..."
 	@${GLOBAL_POETRY} run mkdocs serve
 
-${DOCS_SITE_DIRECTORY}: ${MKDOCS_YAML} ${POETRY_LOCK} ${DOCS_INSTALLED}
+${DOCS_SITE_DIRECTORY}: ${MKDOCS_YAML} ${DOCS_INSTALLED}
 	@${MAKE} -s _starting-task-message message="Building Local Docs Folder..."
 	@${GLOBAL_POETRY} run mkdocs build
 	@${MAKE} -s _completed-task-message message="Build Completed"
