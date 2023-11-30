@@ -116,6 +116,11 @@ ${PYVENV_CONFIG}:
 	@${GLOBAL_POETRY} env use $(subst \,/, $(shell command ${GLOBAL_PYENV} which python))
 	@${MAKE} -s _completed-task-message message="Set Up of Poetry's Python Version Completed."
 
+${POETRY_LOCK}: ${PYVENV_CONFIG}
+	@${MAKE} -s _starting-task-message message="Creating poetry.lock..."
+	@${GLOBAL_POETRY} lock --no-update --ansi
+	@${MAKE} -s _completed-task-message message="Created"
+
 ${INSTALLED}: ${PYVENV_CONFIG} ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Installing Main Dependencies..."
 	@${GLOBAL_POETRY} install --ansi
