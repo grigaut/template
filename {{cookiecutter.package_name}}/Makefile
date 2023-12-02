@@ -122,7 +122,7 @@ ${POETRY_LOCK}: ${PYVENV_CONFIG}
 
 ${INSTALLED}: ${POETRY_LOCK}
 	@${MAKE} -s _starting-task-message message="Installing Main Dependencies..."
-	@${GLOBAL_POETRY} install --ansi
+	@${GLOBAL_POETRY} install --without dev --ansi
 	@touch ${INSTALLED}
 	@${MAKE} -s _completed-task-message message="Successful Installation of Main Dependencies"
 
