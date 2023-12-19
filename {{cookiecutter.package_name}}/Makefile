@@ -77,13 +77,13 @@ check-pyenv:
 	@if [ -z ${GLOBAL_PYENV} ]; then echo -e "Pyenv is not installed on your global python. Check 'https://github.com/pyenv/pyenv' to install pyenv."; exit 2 ;fi
 	@${MAKE} -s _completed-task-message message="Valid Installation"
 
-.PHONY: pyenv-install
+.PHONY: _pyenv-install
 _pyenv-install:
 	@${MAKE} -s _starting-task-message message="Installing Python ${version} using Pyenv..."
 	${GLOBAL_PYENV} install --skip-existing $(version)
 	@${MAKE} -s _completed-task-message message="Installation Completed"
 
-.PHONY: pyenv-local
+.PHONY: _pyenv-local
 _pyenv-local:
 	@${MAKE} -s _starting-task-message message="Setting Python ${version} as local version..."
 	${GLOBAL_PYENV} local $(version)
