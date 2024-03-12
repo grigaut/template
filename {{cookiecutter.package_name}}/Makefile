@@ -18,6 +18,7 @@ DOCS_SITE_DIRECTORY := ${CWD_NO_SPACE}/site
 PYPROJECT := ${CWD_NO_SPACE}/pyproject.toml
 POETRY_LOCK := ${CWD_NO_SPACE}/poetry.lock
 PRE_COMMIT_CONFIG := ${CWD_NO_SPACE}/.pre-commit-config.yaml
+PYTHON_VERSION := ${CWD_NO_SPACE}/.python-version
 PYVENV_CONFIG := ${VENV_DIRECTORY}/pyvenv.cfg
 DEV_INSTALLED := ${VENV_DIRECTORY}/.dev_installed
 {% if cookiecutter.include_docs %}
@@ -90,8 +91,8 @@ _pyenv-local:
 	${GLOBAL_PYENV} local $(version)
 	@${MAKE} -s _completed-task-message message="Local Python Version Set to ${version} "
 
-.PHONY: set-pyenv-up
-set-pyenv-up: check-pyenv
+${PYTHON_VERSION}:
+	@${MAKE} -s check-pyenv
 	@${MAKE} -s _pyenv-install version=$(PYTHON_TARGET_VERSION)
 	@${MAKE} -s _pyenv-local version=$(PYTHON_TARGET_VERSION)
 
@@ -109,8 +110,7 @@ check-poetry: ${PYPROJECT}
 	@if [ -z ${GLOBAL_POETRY} ]; then echo -e "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
 	@${MAKE} -s _completed-task-message message="Valid Configuration"
 
-${PYVENV_CONFIG}:
-	@${MAKE} -s set-pyenv-up
+${PYVENV_CONFIG}: ${PYTHON_VERSION}
 	@${MAKE} -s check-poetry
 	@${MAKE} -s _starting-task-message message="Set up of Poetry's Python Version..."
 	@${GLOBAL_POETRY} env use $(subst \,/, $(shell command ${GLOBAL_PYENV} which python))
