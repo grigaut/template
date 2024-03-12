@@ -6,25 +6,26 @@ GLOBAL_PYENV := $(shell command -v pyenv 2> /dev/null)
 PYTHON_TARGET_VERSION := {{cookiecutter.python_local_version}}
 
 # Paths
-VENV_DIRECTORY := ${PWD}/.venv
-GIT_DIRECTORY := ${PWD}/.git
+CWD_NO_SPACE := $(subst $() $(),\ ,${PWD})
+VENV_DIRECTORY := ${CWD_NO_SPACE}/.venv
+GIT_DIRECTORY := ${CWD_NO_SPACE}/.git
 HOOKS_DIRECTORY := ${GIT_DIRECTORY}/hooks
 {% if cookiecutter.include_docs %}
-DOCS_SITE_DIRECTORY := ${PWD}/site
+DOCS_SITE_DIRECTORY := ${CWD_NO_SPACE}/site
 {% endif -%}
 
 # Files to Monitor
-PYPROJECT := ${PWD}/pyproject.toml
-POETRY_LOCK := ${PWD}/poetry.lock
-PRE_COMMIT_CONFIG := ${PWD}/.pre-commit-config.yaml
+PYPROJECT := ${CWD_NO_SPACE}/pyproject.toml
+POETRY_LOCK := ${CWD_NO_SPACE}/poetry.lock
+PRE_COMMIT_CONFIG := ${CWD_NO_SPACE}/.pre-commit-config.yaml
 PYVENV_CONFIG := ${VENV_DIRECTORY}/pyvenv.cfg
 DEV_INSTALLED := ${VENV_DIRECTORY}/.dev_installed
 {% if cookiecutter.include_docs %}
 DOCS_INSTALLED := ${VENV_DIRECTORY}/.docs_installed
 {% endif -%}
 INSTALLED := ${VENV_DIRECTORY}/.installed
-REQUIREMENTS := ${PWD}/requirements.txt
-MKDOCS_YAML := ${PWD}/mkdocs.yaml
+REQUIREMENTS := ${CWD_NO_SPACE}/requirements.txt
+MKDOCS_YAML := ${CWD_NO_SPACE}/mkdocs.yaml
 
 # Colors and Emojis
 
