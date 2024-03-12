@@ -91,6 +91,9 @@ _pyenv-local:
 	${GLOBAL_PYENV} local $(version)
 	@${MAKE} -s _completed-task-message message="Local Python Version Set to ${version} "
 
+.PHONY: pyenv-set-up
+pyenv-set-up: ${PYTHON_VERSION}
+
 ${PYTHON_VERSION}:
 	@${MAKE} -s check-pyenv
 	@${MAKE} -s _pyenv-install version=$(PYTHON_TARGET_VERSION)
@@ -110,11 +113,17 @@ check-poetry: ${PYPROJECT}
 	@if [ -z ${GLOBAL_POETRY} ]; then echo -e "Poetry is not installed on your global python. Use 'make install-poetry' to install Poetry on your global python."; exit 2 ;fi
 	@${MAKE} -s _completed-task-message message="Valid Configuration"
 
+.PHONY: pyenv-set-up
+pyenv-set-up : ${PYVENV_CONFIG}
+
 ${PYVENV_CONFIG}: ${PYTHON_VERSION}
 	@${MAKE} -s check-poetry
 	@${MAKE} -s _starting-task-message message="Set up of Poetry's Python Version..."
 	@${GLOBAL_POETRY} env use $(subst \,/, $(shell command ${GLOBAL_PYENV} which python))
 	@${MAKE} -s _completed-task-message message="Set Up of Poetry's Python Version Completed."
+
+.PHONY: poetry-lock
+poetry-lock: ${POETRY_LOCK}
 
 ${POETRY_LOCK}: ${PYVENV_CONFIG}
 	@${MAKE} -s _starting-task-message message="Creating poetry.lock..."
@@ -143,6 +152,9 @@ ${DEV_INSTALLED}: ${POETRY_LOCK}
 	@touch ${DEV_INSTALLED}
 	@${MAKE} -s _completed-task-message message="Successful Installation of All Dependencies"
 
+.PHONY: hooks
+hooks: ${HOOKS_DIRECTORY}
+
 ${HOOKS_DIRECTORY}: ${PRE_COMMIT_CONFIG} ${POETRY_LOCK} ${GIT_DIRECTORY}
 	@${MAKE} -s _starting-task-message message="Installing Pre-Commit Hooks..."
 	@${GLOBAL_POETRY} run pre-commit install
@@ -169,13 +181,14 @@ view-docs: ${DOCS_INSTALLED}
 	@${MAKE} -s _starting-task-message message="Serving Docs On Local Port..."
 	@${GLOBAL_POETRY} run mkdocs serve
 
+.PHONY: build-docs
+build-docs: ${DOCS_SITE_DIRECTORY}
+
 ${DOCS_SITE_DIRECTORY}: ${MKDOCS_YAML} ${DOCS_INSTALLED}
 	@${MAKE} -s _starting-task-message message="Building Local Docs Folder..."
 	@${GLOBAL_POETRY} run mkdocs build
 	@${MAKE} -s _completed-task-message message="Build Completed"
 
-.PHONY: build-docs
-build-docs: ${DOCS_SITE_DIRECTORY}
 {% if cookiecutter.is_on_github %}
 .PHONY: deploy-docs
 deploy-docs: ${DOCS_INSTALLED}
@@ -187,8 +200,8 @@ deploy-docs: ${DOCS_INSTALLED}
 {% endif -%}
 # Git
 
-set-git-up:
-	@${MAKE} -s ${GIT_DIRECTORY}
+.PHONY: git-set-up
+git-set-up: ${GIT_DIRECTORY}
 
 .PHONY: check-git
 check-git:
